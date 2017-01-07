@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#85DB18</color>
+    <color name="splash_background">#F5F6D4</color>
+    <color name="color_appbar">#85DB18</color>
+    <color name="background_main">#85DB18</color>
+    <color name="text">#CD853F</color>
+    <color name="text_black">#080808</color>
+    <color name="text_hint">#FFD7D7D0</color>
+    <color name="background_main_2">#FFFFFF</color>
+</resources>

@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">FindHouse</string>
+    <string name="google_maps_api_key">AIzaSyDIoyl48T6r8uVOLSmKJHoCAYVKe7ydaU8</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_splash">Find House!</string>
+    <string name="lg_hint_username">Tên tài khoản của bạn...</string>
+    <string name="lg_hint_password">Mật khẩu của bạn...</string>
+    <string name="facebook_app_id">306097136425641</string>
+    <string name="quen_mat_khau"><u>Quên mật khẩu !</u></string>
+    <string name="title_dangky"><u>Đăng ký tài khoản mới!</u> Hoặc:</string>
+    <string name="titlt_dialog_luu_y">Lưu ý</string>
+    <string name="signup_title_fullname">Họ và tên</string>
+    <string name="signup_title_tentaikhoan">Tên tài khoản</string>
+    <string name="signup_title_pass">Mật khẩu</string>
+    <string name="signup_title_pass_2">Xác nhận lại mật khẩu</string>
+    <string name="email">Email</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="spl_title_1">Find House!</string>
+    <string name="spl_title_2">An Cư lập nghiệp</string>
+    <string name="lg_title_1">Find House!</string>
+    <string name="lg_title_btn_xacnhan">Xác Nhận</string>
+    <string name="dk_title_1">Đăng ký tài khoản</string>
+    <string name="detail_title_lienhe"><u>Liên hệ:</u></string>
+    <string name="detail_title_dientich"><u>Diện tích:</u></string>
+    <string name="detail__title_diachi"><u>Địa chỉ:</u></string>
+    <string name="detail_title_mota"><u>Mô tả:</u></string>
+</resources>

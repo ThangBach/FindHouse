@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_dialog"
+    android:padding="5dp">
+    <TextView
+        android:text="Vui lòng đăng nhập để đăng bài !"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#F5F6D4"
+        android:fontFamily="sans-serif-smallcaps"
+        android:textStyle="bold"
+        android:textSize="25dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:layout_marginTop="10dp">
+        <Button
+            android:id="@+id/dialog_login_btn_dangnhap"
+            android:text="Đăng nhập"
+            android:textSize="20dp"
+            android:textColor="@color/background_main"
+            android:background="@drawable/border_item_post"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"/>
+        <Button
+            android:id="@+id/dialog_login_btn_dangky"
+            android:text="Đăng ký"
+            android:textSize="20dp"
+            android:textColor="@color/background_main"
+            android:background="@drawable/border_item_post"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            />
+    </LinearLayout>
+
+</LinearLayout>
