@@ -20,7 +20,7 @@
                 <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:layout_gravity="center"
                 android:textAlignment="center"
@@ -36,7 +36,7 @@
             android:paddingTop="3dp"
             android:background="@color/background_main"
             android:textColor="@color/background_main_2"/>
-        <com.google.android.gms.maps.MapView
+            <com.google.android.gms.maps.MapView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

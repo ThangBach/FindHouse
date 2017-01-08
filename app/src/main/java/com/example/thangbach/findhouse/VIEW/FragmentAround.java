@@ -20,6 +20,7 @@ import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.example.thangbach.findhouse.DAO.GPSTracker;
 import com.example.thangbach.findhouse.DAO.Post;
 import com.example.thangbach.findhouse.R;
 import com.example.thangbach.findhouse.SERVICE.UserIMP;
+import com.google.android.gms.drive.internal.StringListResponse;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -73,6 +75,7 @@ public class FragmentAround extends Fragment implements OnMapReadyCallback,Googl
         UserIMP.myData= FirebaseDatabase.getInstance().getReference();
 
         spinner = (MaterialSpinner)view.findViewById(R.id.spinner);
+//        String[] items={"1 Km", "3 Km", "5 Km", "10 Km", "15 Km","20 Km", "Tất cả"};
         spinner.setItems("1 Km", "3 Km", "5 Km", "10 Km", "15 Km","20 Km", "Tất cả");
         kmHashMap.put("1 Km","1");
         kmHashMap.put("3 Km","3");
@@ -81,7 +84,6 @@ public class FragmentAround extends Fragment implements OnMapReadyCallback,Googl
         kmHashMap.put("15 Km","15");
         kmHashMap.put("20 Km","20");
         kmHashMap.put("Tất cả","0");
-
 
         gps = new GPSTracker(getActivity());
         if(gps.canGetLocation()){
@@ -134,84 +136,92 @@ public class FragmentAround extends Fragment implements OnMapReadyCallback,Googl
                 .strokeColor(Color.RED)
                 .fillColor(Color.BLUE));
         googleMap.setMyLocationEnabled(true);
+        UserIMP.myData.child("POST").orderByChild("postDate").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Post post=dataSnapshot.getValue(Post.class);
+                post.setPostID(dataSnapshot.getKey());
+
+                googleMap.addMarker(new MarkerOptions()
+                        .position(myLocation)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.geo_32))
+                        .title("Vị trí hiện tại của bạn")
+                );
+
+                Geocoder gc=new Geocoder(getActivity());
+                List<Address> addressList=null;
+
+                if(gc.isPresent()) {
+                    try {
+                        addressList = gc.getFromLocationName(post.getPostAddress().toString(), 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Address address = addressList.get(0);
+                    LatLng latLng=new LatLng(address.getLatitude(),address.getLongitude());
+                    Float gia= Float.valueOf(Integer.valueOf(post.getPostPrice().substring(0,2)));
+                    numTxt.setText(precision.format(gia)+"Tr");
+                    double distance=CalculationByDistance(myLocation,latLng);
+                    //double km= Double.parseDouble(kmHashMap.get(item));
+                    List<LatLng> latLngs=new ArrayList<LatLng>();
+                    //latLngs.add(latLng);
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(latLng)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(),pricemarker)))
+                                    .title(dataSnapshot.getKey())
+
+                            );
+
+                    if (distance>0){
+//                        Marker marker = googleMap.addMarker(new MarkerOptions()
+//                                .position(latLng)
+//                                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(),pricemarker)))
+//                                .title(dataSnapshot.getKey())
+//                        );
+//                        marker.remove();
+                    }else {
+//                        if (distance<0){
+//                            latLngs.add(latLng);
+//                            googleMap.addMarker(new MarkerOptions()
+//                                    .position(latLng)
+//                                    .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(),pricemarker)))
+//                                    .title(dataSnapshot.getKey())
+//
+//                            );
+//                        }
+                    }
+
+
+                    //Toast.makeText(FindActivity.this, "" + latLng.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Post post=dataSnapshot.getValue(Post.class);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, final String item) {
                 Snackbar.make(view, "Đang tìm trong bán kính " + item, Snackbar.LENGTH_LONG).show();
                 googleMap.clear();
-                UserIMP.myData.child("POST").orderByChild("postDate").addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        Post post=dataSnapshot.getValue(Post.class);
-                        post.setPostID(dataSnapshot.getKey());
 
-                        googleMap.addMarker(new MarkerOptions()
-                                .position(myLocation)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.geo_32))
-                                .title("Vị trí hiện tại của bạn")
-                        );
-
-                        Geocoder gc=new Geocoder(getActivity());
-                        List<Address> addressList=null;
-
-                            if(gc.isPresent()) {
-                                try {
-                                    addressList = gc.getFromLocationName(post.getPostAddress().toString(), 1);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                Address address = addressList.get(0);
-                                LatLng latLng=new LatLng(address.getLatitude(),address.getLongitude());
-                                Float gia= Float.valueOf(Integer.valueOf(post.getPostPrice().substring(0,2)));
-                                numTxt.setText(precision.format(gia)+"Tr");
-                                double distance=CalculationByDistance(myLocation,latLng);
-                                double km= Double.parseDouble(kmHashMap.get(item));
-                                List<LatLng> latLngs=new ArrayList<LatLng>();
-
-                                if (distance>3){
-                                    Marker marker = googleMap.addMarker(new MarkerOptions()
-                                            .position(latLng)
-                                            .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(),pricemarker)))
-                                            .title(dataSnapshot.getKey())
-                                    );
-                                    marker.remove();
-                                }else {
-                                    if (distance<3){
-                                    latLngs.add(latLng);
-                                    googleMap.addMarker(new MarkerOptions()
-                                            .position(latLng)
-                                            .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(),pricemarker)))
-                                            .title(dataSnapshot.getKey())
-
-                                    );
-                                }
-                                }
-
-
-                                //Toast.makeText(FindActivity.this, "" + latLng.toString(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        Post post=dataSnapshot.getValue(Post.class);
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-
-                });
             }
         });
         googleMap.setOnMarkerClickListener(this);
