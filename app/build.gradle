@@ -47,6 +47,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.6.0'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.android.gms:play-services-maps:9.6.0'
+    compile 'com.google.android.gms:play-services:9.6.0'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
 
@@ -61,5 +62,6 @@ dependencies {
 
     //autocomplete
     compile 'com.seatgeek:placesautocomplete:0.2-SNAPSHOT'
+    compile 'com.android.support:multidex:1.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

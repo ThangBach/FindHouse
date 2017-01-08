@@ -177,8 +177,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-
         supportMapFragment.getMapAsync(this);
+
     }
 
     public void anhXa(){
@@ -192,8 +192,6 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         main_image_person=(de.hdodenhof.circleimageview.CircleImageView)findViewById(R.id.main_image_person);
-
-
     }
 
     public void addPost(Post post){

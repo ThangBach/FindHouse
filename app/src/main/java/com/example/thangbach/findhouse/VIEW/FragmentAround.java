@@ -2,6 +2,9 @@ package com.example.thangbach.findhouse.VIEW;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,15 +23,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.thangbach.findhouse.Adapter.RecyclerAdapter;
 import com.example.thangbach.findhouse.DAO.GPSTracker;
 import com.example.thangbach.findhouse.DAO.Post;
 import com.example.thangbach.findhouse.R;
-import com.example.thangbach.findhouse.SERVICE.Communicator;
 import com.example.thangbach.findhouse.SERVICE.UserIMP;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -49,10 +52,8 @@ import java.util.HashMap;
 
 import java.util.List;
 
-public class FragmentAround extends MapFragment implements OnMapReadyCallback,GoogleMap.OnPoiClickListener,GoogleMap.OnMarkerClickListener {
-    public FragmentAround() {
-    }
-    com.example.thangbach.findhouse.DAO.Address addressData;
+public class FragmentAround extends Fragment implements OnMapReadyCallback,GoogleMap.OnPoiClickListener,GoogleMap.OnMarkerClickListener {
+
     private static View view;
     GPSTracker gps;
     private LatLng myLocation;
@@ -61,13 +62,17 @@ public class FragmentAround extends MapFragment implements OnMapReadyCallback,Go
     MaterialSpinner spinner;
 
     DecimalFormat precision = new DecimalFormat("#,#");
+
+    GoogleMap googleMap;
+    MapView mapView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_around, container, false);
         UserIMP.myData= FirebaseDatabase.getInstance().getReference();
 
-         spinner = (MaterialSpinner)view.findViewById(R.id.spinner);
+        spinner = (MaterialSpinner)view.findViewById(R.id.spinner);
         spinner.setItems("1 Km", "3 Km", "5 Km", "10 Km", "15 Km","20 Km", "Tất cả");
         kmHashMap.put("1 Km","1");
         kmHashMap.put("3 Km","3");
@@ -101,12 +106,20 @@ public class FragmentAround extends MapFragment implements OnMapReadyCallback,Go
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MapFragment mapFragment=(MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+//        MapFragment mapFragment=(MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
+        mapView=(MapView)view.findViewById(R.id.map);
+        if(mapView!=null){
+            mapView.onCreate(null);
+            mapView.onResume();
+            mapView.getMapAsync(this);
+        }
     }
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
+        MapsInitializer.initialize(getActivity());
+
         final View pricemarker = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.maker_item, null);
         final TextView numTxt = (TextView) pricemarker.findViewById(R.id.num_txt);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,14));
@@ -154,7 +167,7 @@ public class FragmentAround extends MapFragment implements OnMapReadyCallback,Go
                                 double km= Double.parseDouble(kmHashMap.get(item));
                                 List<LatLng> latLngs=new ArrayList<LatLng>();
 
-                                if (distance>km){
+                                if (distance>3){
                                     Marker marker = googleMap.addMarker(new MarkerOptions()
                                             .position(latLng)
                                             .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(),pricemarker)))
@@ -162,7 +175,7 @@ public class FragmentAround extends MapFragment implements OnMapReadyCallback,Go
                                     );
                                     marker.remove();
                                 }else {
-                                    if (distance<km){
+                                    if (distance<3){
                                     latLngs.add(latLng);
                                     googleMap.addMarker(new MarkerOptions()
                                             .position(latLng)
